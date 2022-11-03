@@ -1,5 +1,5 @@
-// récupération de l'orderId dans le localstorage
-const orderId = localStorage.getItem("orderId")
+// récupération de l'orderId dans l'URL
+const orderId = new URL(window.location.href).searchParams.get("id")
 
 document
     .getElementById('orderId')
