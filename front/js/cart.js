@@ -167,9 +167,9 @@ function submitCart(event){
         body: JSON.stringify({contact, products})
     }
     ).then(response => response.json()
-    ).then(data => { // sauvegarde de l'orderId dans le localStorage
-    localStorage.setItem('orderId', data.orderId)
+    ).then(data => { 
     // lien vers page confirmation 
     document.location.href = 'confirmation.html?id='+ data.orderId
     })
+    localStorage.removeItem('cart')
 }
