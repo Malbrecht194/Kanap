@@ -33,13 +33,13 @@ cart.forEach(cartItem => {
     template.querySelector('.itemQuantity').addEventListener('change', event => {
         const quantity = event.target.value
         if (quantity !== cartItem.quantiT) {
-                cartItem.quantiT = parseInt(quantity)
-                localStorage.setItem("cart", JSON.stringify(cart))
+            cartItem.quantiT = parseInt(quantity)
+            localStorage.setItem("cart", JSON.stringify(cart))
         }
         computeTotal()
     })
-    
-    template.querySelector('.deleteItem').onclick = (event) =>{ // supprimer 
+
+    template.querySelector('.deleteItem').onclick = (event) => { // supprimer 
         cart = cart.filter(_ci => _ci !== cartItem)
         localStorage.setItem("cart", JSON.stringify(cart))
         event.target.closest(".cart__item").remove()
@@ -83,64 +83,64 @@ function disableSubmit() { // vérification du form
     if (/.+/.test(document.getElementById("address").value)) {
         document.querySelector('#addressErrorMsg').innerText = ""
     } else {
-        document.querySelector('#addressErrorMsg').innerText = "Veuillez rentrer une adresse"   
-        disabled = true  
+        document.querySelector('#addressErrorMsg').innerText = "Veuillez rentrer une adresse"
+        disabled = true
     }
-    
+
     if (/.+/.test(document.getElementById("city").value)) {
         document.querySelector('#cityErrorMsg').innerText = ""
     } else {
-        document.querySelector('#cityErrorMsg').innerText = "Veuillez rentrer une ville"    
+        document.querySelector('#cityErrorMsg').innerText = "Veuillez rentrer une ville"
         disabled = true
     }
 
     if (/^[\w][\w-\.]+[\w]@([\w-]+\.)+[\w-]+$/.test(document.getElementById("email").value)) {
         document.querySelector('#emailErrorMsg').innerText = ""
     } else {
-        document.querySelector('#emailErrorMsg').innerText = "Veuillez rentrer une adresse email"  
-        disabled = true   
+        document.querySelector('#emailErrorMsg').innerText = "Veuillez rentrer une adresse email"
+        disabled = true
     }
 
-    if (!cart.length){
+    if (!cart.length) {
         disabled = true
     }
 
     if (disabled) {
-      document
-        .getElementById("order")
-        .setAttribute("disabled", true)
+        document
+            .getElementById("order")
+            .setAttribute("disabled", true)
     } else {
-      document
-        .getElementById("order")
-        .removeAttribute("disabled")
+        document
+            .getElementById("order")
+            .removeAttribute("disabled")
     }
 }
 
 document
-.getElementById("firstName")
-.addEventListener("input", disableSubmit)
+    .getElementById("firstName")
+    .addEventListener("input", disableSubmit)
 
 document
-.getElementById("lastName")
-.addEventListener("input", disableSubmit)
+    .getElementById("lastName")
+    .addEventListener("input", disableSubmit)
 
 document
-.getElementById("address")
-.addEventListener("input", disableSubmit)
+    .getElementById("address")
+    .addEventListener("input", disableSubmit)
 
 document
-.getElementById("city")
-.addEventListener("input", disableSubmit)
+    .getElementById("city")
+    .addEventListener("input", disableSubmit)
 
 document
-.getElementById("email")
-.addEventListener("input", disableSubmit)
+    .getElementById("email")
+    .addEventListener("input", disableSubmit)
 
 document
-.querySelector('.cart__order__form')
-.addEventListener("submit", submitCart)
+    .querySelector('.cart__order__form')
+    .addEventListener("submit", submitCart)
 
-function submitCart(event){
+async function submitCart(event) {
     event.preventDefault()
     const contact = {
         firstName: document.getElementById("firstName").value,
@@ -150,26 +150,26 @@ function submitCart(event){
         email: document.getElementById("email").value
     }
     const products = cart.reduce( //extraction unique des ID
-    (products, cartItem) => {
-        for (let i = 0; i<cartItem.quantiT; i++) {
-            products.push(cartItem.id)
-        }
-        return products
-    },
-    [])
+        (products, cartItem) => {
+            for (let i = 0; i < cartItem.quantiT; i++) {
+                products.push(cartItem.id)
+            }
+            return products
+        },
+        [])
     // Envoie des données à l'api
-    fetch("http://localhost:3000/api/products/order", {
+    const response = await fetch("http://localhost:3000/api/products/order", {
         method: "POST",
         headers: {
-          'Accept': 'application/json', 
-          'Content-Type': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({contact, products})
-    }
-    ).then(response => response.json()
-    ).then(data => { 
-    // lien vers page confirmation 
-    document.location.href = 'confirmation.html?id='+ data.orderId
+        body: JSON.stringify({ contact, products })
     })
+
+    const data = await response.json()
     localStorage.removeItem('cart')
+    // lien vers page confirmation 
+    document.location.href = 'confirmation.html?id=' + data.orderId
+
 }
