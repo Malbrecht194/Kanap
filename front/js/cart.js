@@ -39,7 +39,7 @@ cart.forEach(cartItem => {
         computeTotal()
     })
 
-    template.querySelector('.deleteItem').onclick = (event) => { // supprimer 
+    template.querySelector('.deleteItem').onclick = (event) => { // Le bouton supprimer 
         cart = cart.filter(_ci => _ci !== cartItem)
         localStorage.setItem("cart", JSON.stringify(cart))
         event.target.closest(".cart__item").remove()
@@ -50,7 +50,7 @@ cart.forEach(cartItem => {
 });
 computeTotal()
 
-function computeTotal() { //Prix total
+function computeTotal() { // Permet de calculer le prix total du panier et d'afficher le nombre d'article.
     let totalQuantity = 0
     let totalPrice = 0
     for (let cartItem of cart) {
@@ -64,7 +64,7 @@ function computeTotal() { //Prix total
     disableSubmit()
 }
 
-function disableSubmit() { // vérification du form
+function disableSubmit() { // Vérifie le formulaire puis la contenance du panier et ajoute l'atribut disabled au bouton commander lorsque les vérifications sont fausses.
     let disabled = false
     if (/^[A-Z][a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž ,.'-]+$/.test(document.getElementById("firstName").value)) {
         document.querySelector('#firstNameErrorMsg').innerText = ""
@@ -80,14 +80,14 @@ function disableSubmit() { // vérification du form
         disabled = true
     }
 
-    if (/.+/.test(document.getElementById("address").value)) {
+    if (/[A-Za-z\d]{2,3}.+/.test(document.getElementById("address").value)) { // changement de la regex
         document.querySelector('#addressErrorMsg').innerText = ""
     } else {
         document.querySelector('#addressErrorMsg').innerText = "Veuillez rentrer une adresse"
         disabled = true
     }
 
-    if (/.+/.test(document.getElementById("city").value)) {
+    if (/[A-Za-z\d]{2,3}.+/.test(document.getElementById("city").value)) { // changement de la regex
         document.querySelector('#cityErrorMsg').innerText = ""
     } else {
         document.querySelector('#cityErrorMsg').innerText = "Veuillez rentrer une ville"
@@ -140,7 +140,7 @@ document
     .querySelector('.cart__order__form')
     .addEventListener("submit", submitCart)
 
-async function submitCart(event) {
+async function submitCart(event) { //Permet d'envoyer les données à l'API
     event.preventDefault()
     const contact = {
         firstName: document.getElementById("firstName").value,

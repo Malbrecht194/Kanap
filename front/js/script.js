@@ -1,4 +1,4 @@
-async function main() {
+async function main() { // Récupère les produits dans l'API puis crée les cartes produits.
     const response = await fetch('http://localhost:3000/api/products');
     const items = await response.json();
     console.log(items);
@@ -6,7 +6,6 @@ async function main() {
     for (let item of items) {
         const template = document.querySelector('#item').content.cloneNode(true)
         /* Une autre façon de le faire : template.querySelector('.productLink').setAttribute('href','./product.html?id=' + item._id) */
-        // template.querySelector('.productLink').setAttribute('href',`./product.html?id=${item._id}`)
         template.querySelector('.productLink').setAttribute('href', `./product.html?id=${item._id}`)
         template.querySelector('.productImg').setAttribute('src', item.imageUrl)
         template.querySelector('.productImg').setAttribute('alt', item.altTxt)
